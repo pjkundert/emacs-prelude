@@ -8,15 +8,19 @@
 ;; unavailable on OS-X.  The following bindings cannot be triggered
 ;; directly via the terminal
 ;;
-;; <C-return>      org-insert-heading-respect-content
-;; <C-S-return>    org-insert-todo-heading-respect-content
+;; key             org-mode binding                         iTerm sends
+;; ----------      ---------------------------------------  -----------
+;; <C-return>      org-insert-heading-respect-content       Esc+[CR
+;; <C-S-return>    org-insert-todo-heading-respect-content  Esc+[CSR
 ;; <M-S-return>    org-insert-todo-heading
-;; <S-return>      prelude-insert-empty-line
+;; <S-return>      prelude-insert-empty-line                Esc+[SR
 ;;
-;; in iTerm, set Keys to send the following text instead:
-(global-set-key (kbd "C-c C-x C-h")     'org-insert-heading-respect-content)
-(global-set-key (kbd "C-c C-x C-m")     'org-insert-todo-heading-respect-content)
-
+;; in iTerm Preferences Profiles, Keys, add control-return,
+;; shift-return and control-shift-return to Send Escape Sequences:
+;;
+(define-key key-translation-map (kbd "ESC [ C R")   (kbd "<C-return>"))
+(define-key key-translation-map (kbd "ESC [ S R")   (kbd "<S-return>"))
+(define-key key-translation-map (kbd "ESC [ C S R") (kbd "<C-S-return>"))
 
 (setq org-agenda-files (quote ("~/org/")))
 (setq org-default-notes-file "~/org/refile.org")

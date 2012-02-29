@@ -12,3 +12,4 @@ url
 personal/*.el
 ede-projects.el
 abbrev_defs
+tramp
