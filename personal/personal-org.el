@@ -5,35 +5,9 @@
 ;;         http://doc.norang.ca/org-mode.html
 ;;
 
-
-;; In addition to the default org bindings:
-;; C-c a           org-agenda
-;; C-c b           org-iswitchb
-;; C-c l           org-store-link
-(global-set-key  (kbd "C-c c")          'org-capture)
-
-;; Paths and file types.  We use our own local copy of org-mode,
-;; because the one included with emacs 24 seems to often be broken.
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/personal/org-mode/lisp"))
-(require 'org-install)
-
-(add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
-
 (setq org-agenda-files (quote ("~/org/")))
 (setq org-default-notes-file "~/org/refile.org")
-
-;; flyspell mode for spell checking everywhere
-(add-hook 'org-mode-hook 'turn-on-flyspell 'append)
-
-;; Disable C-c [ and C-c ] in org-mode
-(add-hook 'org-mode-hook
-          (lambda ()
-            ;; Undefine C-c [ and C-c ] since this breaks my
-            ;; org-agenda files when directories are include It
-            ;; expands the files in the directories individually
-            (org-defkey org-mode-map "\C-c["    'undefined)
-            (org-defkey org-mode-map "\C-c]"    'undefined))
-          'append)
+(add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
 
 ;; MobileOrg iPhone app support
 ;; Set to the location of your Org files on your local system
@@ -43,7 +17,32 @@
 ;; Set to <your Dropbox root directory>/MobileOrg.
 (setq org-mobile-directory "~/Dropbox/MobileOrg")
 
-;; org-mode states, colors
+;; Paths and file types.  We use our own local copy of org-mode,
+;; because the one included with emacs 24 seems to often be broken.
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/personal/org-mode/lisp"))
+(require 'org-install)
+
+;; In addition to the default org bindings:
+;; C-c a           org-agenda
+;; C-c b           org-iswitchb
+;; C-c l           org-store-link
+(global-set-key  (kbd "C-c c")          'org-capture)
+
+;; flyspell mode for spell checking everywhere
+(add-hook 'org-mode-hook 'turn-on-flyspell 'append)
+
+;; Disable C-c [ and C-c ] in org-mode; we load by directory, not
+;; individual files.
+(add-hook 'org-mode-hook
+          (lambda ()
+            ;; Undefine C-c [ and C-c ] since this breaks my
+            ;; org-agenda files when directories are include It
+            ;; expands the files in the directories individually
+            (org-defkey org-mode-map "\C-c["    'undefined)
+            (org-defkey org-mode-map "\C-c]"    'undefined))
+          'append)
+
+;; org-mode states, colors, transitions
 (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!/!)")
               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE"))))
@@ -68,10 +67,10 @@
               ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
               ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 
-;; Tags with fast selection keys
-;; @... tags are mutually exclusive, and indicate that the item must
-;; actual occur @ the target location.  The other tags simply indicate
-;; that the item is related to the concept.
+;; Tags with fast selection keys.  @... tags are mutually exclusive,
+;; and indicate that the item must actual occur @ the physical target
+;; location.  The other tags simply indicate that the item is related
+;; to the concept.
 (setq org-tag-alist (quote ((:startgroup)
                             ("@enbridge" . ?e)
                             ("@home" . ?H)
