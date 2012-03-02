@@ -12,24 +12,6 @@
 ;; C-c l           org-store-link
 (global-set-key  (kbd "C-c c")          'org-capture)
 
-;; alternatives for <C-return>, <S-return> and <C-S-return>, which are
-;; unavailable on OS-X.  The following bindings cannot be triggered
-;; directly via the terminal
-;;
-;; key             org-mode binding                         iTerm sends
-;; ----------      ---------------------------------------  -----------
-;; <C-return>      org-insert-heading-respect-content       Esc+[CR
-;; <C-S-return>    org-insert-todo-heading-respect-content  Esc+[CSR
-;; <M-S-return>    org-insert-todo-heading
-;; <S-return>      prelude-insert-empty-line                Esc+[SR
-;;
-;; in iTerm Preferences Profiles, Keys, add control-return,
-;; shift-return and control-shift-return to Send Escape Sequences:
-;;
-(define-key key-translation-map (kbd "ESC [ C R")   (kbd "<C-return>"))
-(define-key key-translation-map (kbd "ESC [ S R")   (kbd "<S-return>"))
-(define-key key-translation-map (kbd "ESC [ C S R") (kbd "<C-S-return>"))
-
 ;; Paths and file types.  We use our own local copy of org-mode,
 ;; because the one included with emacs 24 seems to often be broken.
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/personal/org-mode/lisp"))
