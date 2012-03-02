@@ -13,3 +13,5 @@ personal/*.el
 ede-projects.el
 abbrev_defs
 tramp
+bookmarks
+personal/org-mode

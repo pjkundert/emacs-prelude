@@ -1,0 +1,4 @@
+* emacs-prelude/personal -- local customizations
+** Makefile
+   Install and build any necessary targets, such as org-mode.
+
