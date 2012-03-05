@@ -16,3 +16,5 @@
 
 (global-hl-line-mode -1)
 (blink-cursor-mode t)
+
+(disable-theme 'zenburn)
