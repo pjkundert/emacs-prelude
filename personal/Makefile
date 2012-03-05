@@ -1,6 +1,7 @@
 .PHONY: FORCE all
 all:			org-mode/lisp/org-install.elc	\
-			$(HOME)/org
+			$(HOME)/org			\
+			multi-web-mode
 
 # ~/org/ is typically shared via Dropbox/org; create symlink if it doesn't exist
 $(HOME)/org:		FORCE
@@ -21,3 +22,6 @@ org-mode:
 org-mode/lisp/org-install.elc:				\
 			org-mode
 	cd $^; make
+
+multi-web-mode:
+	git clone git://github.com/fgallina/multi-web-mode.git $@
