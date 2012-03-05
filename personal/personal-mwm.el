@@ -7,3 +7,7 @@
                   (css-mode "<style +type=\"text/css\"[^>]*>" "</style>")))
 (setq mweb-filename-extensions '("php" "htm" "html" "ctp" "phtml" "php4" "php5"))
 (multi-web-global-mode 1)
+
+(add-hook 'html-mode-hook
+          (lambda ()
+            (setq sgml-basic-offset 4)) 'append)
