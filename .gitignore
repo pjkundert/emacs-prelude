@@ -9,10 +9,10 @@ el-get
 semanticdb
 custom.el
 url
-personal/*.el
 ede-projects.el
 abbrev_defs
 tramp
 bookmarks
 personal/org-mode
+personal/multi-web-mode
 org-clock-save.el
