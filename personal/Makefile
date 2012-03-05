@@ -4,9 +4,8 @@ all:			org-mode/lisp/org-install.elc	\
 
 # ~/org/ is typically shared via Dropbox/org; create symlink if it doesn't exist
 $(HOME)/org:		FORCE
-	@if [ ! -d $@ ] && [] ! -L $@ ]; then		\
-	    echo "!!! Creating $(HOME)/org -> $(HOME)/Dropbox/org"; \
-	    ln -fs $(HOME)/Dropbox/org $@;		\
+	@if [ ! -d $@ ] || [ ! -d $@/ ]; then		\
+	    echo "!!! Create a git repo or or symlink $(HOME)/org -> $(HOME)/Dropbox/org"; \
 	fi
 	@echo "Your $(HOME)/org/ directory is:"
 	@ls -ld $@
