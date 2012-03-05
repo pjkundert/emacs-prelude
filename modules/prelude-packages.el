@@ -40,7 +40,7 @@
 
 (defvar prelude-packages
   '(ack-and-a-half auctex clojure-mode coffee-mode deft expand-region
-                   gist groovy-mode haml-mode haskell-mode inf-ruby
+                   gist groovy-mode haml-mode haskell-mode inf-ruby php-mode
                    magit magithub markdown-mode paredit projectile python
                    sass-mode rainbow-mode scss-mode solarized-theme
                    volatile-highlights yaml-mode yari zenburn-theme)
