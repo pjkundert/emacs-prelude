@@ -1,0 +1,15 @@
+* emacs-prelude/personal -- local customizations
+** Makefile
+   Install and build any necessary targets, such as org-mode.
+** personal.el
+   Global modifications to emacs-prelude defaults.
+** personal-appearance.el
+   Any color/theme customizations.
+** personal-bindings.el
+   Key bindings.  Provides support for C-return, S-return and
+   C-S-return in Mac OS-X text terminal iTerm.
+** personal-org.el
+   Set up org-mode
+*** org-mode
+    Custom-installed and built org-mode, from source git repo.
+
