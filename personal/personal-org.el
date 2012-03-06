@@ -5,6 +5,51 @@
 ;;         http://doc.norang.ca/org-mode.html
 ;;
 
+;; Default Task-ID for clocking time to.  Change this to the default
+;; organization/management project for the client.
+(defvar bh/organization-task-id "1ADE2FD8-05B4-45EF-96FB-E386562319D0")
+
+;; Each user interacting with shared org files must have a unique:
+(defvar hc/org-user "perry")
+;; (defvar hc/org-logbook "LOGBOOK")
+
+;; Mark each clock entry with the user name.  Assumes that the clock
+;; line has been inserted, and point is at the end.  This allows us to
+;; merge multiple user's CLOCK entries.
+(defun hc/mark-clock ()
+  (unless remove (insert (format " (%s)" hc/org-user))))
+
+(add-hook 'org-clock-out-hook 'hc/mark-clock)
+
+;; Add "advice" around org.el's org-clock-update-time-maybe (used when
+;; updating a clock time using C-c C-c), to trap the user name (if
+;; any), do the update, and then restore the name on success.  We'll
+;; use (defadvice ... ) to wrap the existing function, to detect and
+;; retain any (...)$ found at end of line (remember that .* is greedy,
+;; so matches the entire line, but then the RE fails and back-tracks
+;; 'til the final '(' is found and the rest of the RE matches).
+(defadvice org-clock-update-time-maybe (around hc/clock-update-time-maybe-user)
+  "Retain trailing (user) when updating clock lines"
+  (interactive)
+  (let ((user (save-excursion
+               (beginning-of-line)
+               (if (looking-at ".*(\\([^)]+\\))[ \t]*$")
+                   (match-string 1)))))
+
+    (message "retained user: %s" user)
+    (if ad-do-it
+        ;; Clock found, so regardless if user found, always return t
+        (progn
+          (if user
+              ;; clock updated, and had found a user.  Point is at
+              ;; end; re-insert.
+              (save-excursion
+                (end-of-line)
+                (insert (format " (%s)" user))))
+          t))))
+(ad-activate 'org-clock-update-time-maybe)
+
+
 (setq org-agenda-files (quote ("~/org/")))
 (setq org-default-notes-file "~/org/refile.org")
 (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
@@ -48,6 +93,12 @@
 ;; C-c b           org-iswitchb
 ;; C-c l           org-store-link
 (global-set-key  (kbd "C-c c")          'org-capture)
+
+;; Some alternative keybindings for norang org-mode stuff
+(global-set-key  (kbd "C-c I")          'bh/punch-in)
+(global-set-key  (kbd "C-c O")          'bh/punch-out)
+(global-set-key  (kbd "C-c h")          'bh/hide-other)
+
 
 ;; Include agenda archive files when searching for things
 (setq org-agenda-text-search-extra-files (quote (agenda-archives)))
@@ -174,6 +225,38 @@
       (quote (("Effort_ALL" . "1:00 2:00 3:00 4:00 5:00 6:00 7:00 8:00 9:00 0:00")
               ("STYLE_ALL" . "habit"))))
 
+
+;; Archive Setup
+;; The following setting ensures that task states are untouched when
+;; they are archived. This makes it possible to archive tasks that are
+;; not marked DONE. By default tasks are archived under the heading *
+;; Archived Tasks in the archive file.
+
+(setq org-archive-mark-done nil)
+(setq org-archive-location "%s_archive::* Archived Tasks")
+
+(defun bh/skip-non-archivable-tasks ()
+  "Skip trees that are not available for archiving"
+  (save-restriction
+    (widen)
+    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
+      ;; Consider only tasks with done todo headings as archivable
+      ;; candidates
+      (if (member (org-get-todo-state) org-done-keywords)
+          (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
+                 (daynr (string-to-int (format-time-string "%d" (current-time))))
+                 (a-month-ago (* 60 60 24 (+ daynr 1)))
+                 (last-month (format-time-string "%Y-%m-" (time-subtract (current-time) (seconds-to-time a-month-ago))))
+                 (this-month (format-time-string "%Y-%m-" (current-time)))
+                 (subtree-is-current (save-excursion
+                                       (forward-line 1)
+                                       (and (< (point) subtree-end)
+                                            (re-search-forward (concat last-month "\\|" this-month) subtree-end t)))))
+            (if subtree-is-current
+                next-headline ; Has a date in this month or last
+                              ; month, skip it
+              nil))  ; available to archive
+        (or next-headline (point-max))))))
 
 ;; Agenda Setup
 
@@ -674,8 +757,6 @@ as the default task."
           (when bh/keep-clock-running
             (bh/clock-in-default-task)))))))
 
-(defvar bh/organization-task-id "eb155a82-92b2-4f25-a3c6-0304591af2f9")
-
 (defun bh/clock-in-organization-task-as-default ()
   (interactive)
   (org-with-point-at (org-id-find bh/organization-task-id 'marker)
@@ -716,6 +797,24 @@ as the default task."
               :min-duration 0
               :max-gap 0
               :gap-ok-around ("4:00"))))
+
+;; switches the clock back to the previously clocked task
+(defun bh/clock-in-last-task (arg)
+  "Clock in the interrupted task if there is one
+Skip the default task and get the next one.
+A prefix arg forces clock in of the default task."
+  (interactive "p")
+  (let ((clock-in-to-task
+         (cond
+          ((eq arg 4) org-clock-default-task)
+          ((and (org-clock-is-active)
+                (equal org-clock-default-task (cadr org-clock-history)))
+           (caddr org-clock-history))
+          ((org-clock-is-active) (cadr org-clock-history))
+          ((equal org-clock-default-task (car org-clock-history)) (cadr org-clock-history))
+          (t (car org-clock-history)))))
+    (org-with-point-at clock-in-to-task
+      (org-clock-in nil))))
 
 
 ;; Note Setup C-c C-z
