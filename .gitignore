@@ -17,3 +17,4 @@ personal/org-mode
 personal/multi-web-mode
 org-clock-save.el
 .org-id-locations
+personal-ids.el

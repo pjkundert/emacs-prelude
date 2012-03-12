@@ -10,8 +10,8 @@
 (defvar bh/organization-task-id "1ADE2FD8-05B4-45EF-96FB-E386562319D0")
 
 ;; Each user interacting with shared org files must have a unique:
-(defvar hc/org-user "perry")
-;; (defvar hc/org-logbook "LOGBOOK")
+;; (defvar hc/org-user "perry")  ; now configured in personal-ids.el
+
 
 ;; Mark each clock entry with the user name.  Assumes that the clock
 ;; line has been inserted, and point is at the end.  This allows us to

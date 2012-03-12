@@ -37,10 +37,17 @@
                (nnimap-server-port 993)
                (nnimap-stream ssl)))
 
+;; hc/... are specified in personal-ids.el; see Makefile  These must
+;; be loaded first...
+(require 'personal-ids)
+
 (setq message-send-mail-function 'smtpmail-send-it
       smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
-      smtpmail-auth-credentials '(("smtp.gmail.com" 587 "perry.kundert@gmail.com" nil))
+      smtpmail-auth-credentials '(("smtp.gmail.com" 587 hc/gmail-addr nil))
       smtpmail-default-smtp-server "smtp.gmail.com"
       smtpmail-smtp-server "smtp.gmail.com"
       smtpmail-smtp-service 587
       starttls-use-gnutls t)
+
+(setq user-full-name hc/full-name)
+(setq user-mail-address hc/email-addr)
