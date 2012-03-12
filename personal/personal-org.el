@@ -65,6 +65,7 @@
 ;; Paths and file types.  We use our own local copy of org-mode,
 ;; because the one included with emacs 24 seems to often be broken.
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/personal/org-mode/lisp"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/personal/org-mode/contrib/lisp"))
 
 (setq org-modules (quote (org-bbdb
                           org-bibtex
@@ -87,6 +88,7 @@
 (setq org-habit-graph-column 50)
 
 (require 'org-install)
+(require 'org-mime)
 
 ;; In addition to the default org bindings:
 ;; C-c a           org-agenda
@@ -99,6 +101,14 @@
 (global-set-key  (kbd "C-c O")          'bh/punch-out)
 (global-set-key  (kbd "C-c h")          'bh/hide-other)
 
+;; Hook up org-mime to (C-c M-o)
+(add-hook 'message-mode-hook
+          (lambda ()
+            (local-set-key "\C-c\M-o" 'org-mime-htmlize)))
+
+(add-hook 'org-mode-hook
+          (lambda ()
+            (local-set-key "\C-c\M-o" 'org-mime-org-buffer-htmlize)))
 
 ;; Include agenda archive files when searching for things
 (setq org-agenda-text-search-extra-files (quote (agenda-archives)))
