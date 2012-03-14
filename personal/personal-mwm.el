@@ -7,6 +7,7 @@
                   (css-mode "<style +type=\"text/css\"[^>]*>" "</style>")))
 (setq mweb-filename-extensions '("php" "htm" "html" "ctp" "phtml" "php4" "php5"))
 (multi-web-global-mode 1)
+(setq mweb-submode-indent-offset 4)
 
 (add-hook 'html-mode-hook
           (lambda ()
