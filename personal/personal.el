@@ -18,3 +18,5 @@
 (blink-cursor-mode t)
 
 (disable-theme 'zenburn)
+
+(setq-default fill-column 80)
