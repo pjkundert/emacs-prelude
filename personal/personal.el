@@ -9,7 +9,7 @@
 (add-hook 'prelude-prog-mode-hook
           (lambda ()
             (prelude-turn-off-whitespace)
-            (remove-hook 'before-save-hook 'whitespace-cleanup)) t)
+            (remove-hook 'before-save-hook 'whitespace-cleanup t)) t)
 
 ;; For other global settings, just run the appropriate function; all
 ;; personal/*.el files will be evaluate after prelude-emacs is loaded.
